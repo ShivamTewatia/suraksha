@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suraksha - Create Account</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      /* Custom Styles for Royal Indian Theme */
+      body {
+        background: linear-gradient(135deg, #fff8e7 0%, #fff3e0 100%);
+        background-attachment: fixed;
+        min-height: 100vh;
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      .royal-texture {
+        background-image: 
+          url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23FFB74D" fill-opacity="0.1"><circle cx="30" cy="30" r="2"/></g></svg>'),
+          url('data:image/svg+xml,<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="indianPattern" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M20,5 Q15,15 20,25 Q25,15 20,5 M5,20 Q15,15 25,20 Q15,25 5,20" fill="%23FF9933" fill-opacity="0.08"/></pattern></defs><rect width="120" height="120" fill="url(%23indianPattern)"/></svg>');
+      }
+
+      /* Enhanced background elements */
+      .floating-elements {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      .floating-elements::before,
+      .floating-elements::after {
+        content: '';
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, rgba(255, 153, 51, 0.12) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 10s ease-in-out infinite;
+      }
+
+      .floating-elements::before {
+        top: -250px;
+        left: -250px;
+        animation-delay: 0s;
+      }
+
+      .floating-elements::after {
+        bottom: -250px;
+        right: -250px;
+        animation-delay: 5s;
+      }
+
+      /* Add decorative elements */
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+          radial-gradient(circle at 85% 15%, rgba(255, 153, 51, 0.15) 0%, transparent 60%),
+          radial-gradient(circle at 15% 85%, rgba(30, 58, 138, 0.15) 0%, transparent 60%),
+          radial-gradient(circle at 50% 50%, rgba(255, 183, 77, 0.08) 0%, transparent 80%),
+          radial-gradient(circle at 20% 20%, rgba(184, 134, 11, 0.1) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: -2;
+      }
+
+      /* Background pattern overlay */
+      .hero-pattern {
+        background-image: 
+          radial-gradient(circle at 50% 50%, rgba(255, 153, 51, 0.08) 0%, transparent 70%),
+          url('data:image/svg+xml,<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="mandala" width="50" height="50" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="2" fill="%23FF9933" fill-opacity="0.1"/><circle cx="25" cy="25" r="8" fill="none" stroke="%23FFB74D" stroke-width="0.5" stroke-opacity="0.1"/><circle cx="25" cy="25" r="15" fill="none" stroke="%23B8860B" stroke-width="0.3" stroke-opacity="0.05"/></pattern></defs><rect width="200" height="200" fill="url(%23mandala)"/></svg>');
+      }
+
+      .gradient-saffron {
+        background: linear-gradient(135deg, #ff9933 0%, #ffb74d 100%);
+      }
+
+      .shadow-royal {
+        box-shadow: 0 20px 60px rgba(255, 153, 51, 0.15);
+      }
+
+      .btn-royal {
+        background: linear-gradient(135deg, #ff9933 0%, #ffb74d 100%);
+        transition: all 0.4s ease;
+      }
+
+      .btn-royal:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 35px rgba(255, 153, 51, 0.4);
+      }
+
+      .card-royal {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 153, 51, 0.2);
+      }
+
+      .text-royalblue { 
+        color: #1E3A8A; 
+      }
+      
+      .text-saffron { 
+        color: #FF9933; 
+      }
+
+      .border-saffron { 
+        border-color: #FF9933; 
+      }
+
+      .bg-saffron {
+        background-color: #FF9933;
+      }
+
+      .from-saffron {
+        --tw-gradient-from: #FF9933;
+      }
+
+      .to-marigold {
+        --tw-gradient-to: #FFB74D;
+      }
+
+      .focus\:ring-saffron:focus {
+        --tw-ring-color: rgba(255, 153, 51, 0.3);
+        border-color: #FF9933;
+      }
+
+      .hero-pattern {
+        background-image: radial-gradient(circle at 50% 50%, rgba(255, 153, 51, 0.1) 0%, transparent 70%);
+      }
+
+      /* Better container structure */
+      .signup-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1rem;
+        box-sizing: border-box;
+        position: relative;
+        z-index: 1;
+      }
+
+      .w-full.max-w-4xl {
+        width: 100%;
+        max-width: 60rem;
+        box-sizing: border-box;
+        position: relative;
+        z-index: 2;
+      }
+
+      /* Improved card layout */
+      .card-royal {
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(25px);
+        border: 1px solid rgba(255, 153, 51, 0.2);
+        box-sizing: border-box;
+        width: 100%;
+        box-shadow: 0 25px 50px -12px rgba(255, 153, 51, 0.25);
+        padding: 3rem;
+        border-radius: 1.5rem;
+      }
+
+      /* Better form structure */
+      .form-section {
+        display: none;
+        width: 100%;
+        min-height: 600px;
+        padding: 1rem 0;
+      }
+
+      .form-section.active {
+        display: block;
+      }
+
+      /* Improved grid layout */
+      .grid {
+        display: grid;
+        width: 100%;
+        box-sizing: border-box;
+        gap: 2rem;
+      }
+
+      .grid.grid-cols-1 {
+        grid-template-columns: 1fr;
+      }
+
+      .grid.md\\:grid-cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      /* Better input styling */
+      .form-input {
+        width: 100%;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid rgba(229, 231, 235, 1);
+        padding: 1rem 1.25rem;
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      .form-input:focus {
+        background: rgba(255, 255, 255, 1);
+        transform: translateY(-1px);
+        box-shadow: 0 10px 25px rgba(255, 153, 51, 0.15);
+      }
+
+      .form-input-with-icon {
+        padding-left: 3rem;
+      }
+
+      .input-group {
+        position: relative;
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 2rem;
+      }
+
+      /* Label styling */
+      .input-group label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #1E3A8A;
+        margin-bottom: 0.75rem;
+        line-height: 1.4;
+      }
+
+      /* Progress indicator improvements */
+      .progress-indicator {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 3rem;
+        padding: 0 1rem;
+      }
+
+      .progress-step {
+        flex: 1;
+        height: 6px;
+        background: #E5E7EB;
+        margin: 0 4px;
+        border-radius: 3px;
+        transition: all 0.4s ease;
+      }
+
+      .progress-step.active {
+        background: linear-gradient(135deg, #ff9933 0%, #ffb74d 100%);
+      }
+
+      .step-label {
+        text-align: center;
+        font-size: 0.875rem;
+        color: #6B7280;
+        margin-top: 1rem;
+        font-weight: 500;
+        line-height: 1.3;
+      }
+
+      .step-label.active {
+        color: #FF9933;
+        font-weight: 600;
+      }
+
+      /* Emergency contact card */
+      .emergency-contact-card {
+        background: linear-gradient(135deg, #FEF3E2 0%, #FDE68A 100%);
+        border: 2px dashed #FF9933;
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-top: 1.5rem;
+        box-shadow: 0 4px 15px rgba(255, 153, 51, 0.1);
+      }
+
+      /* Button improvements */
+      .btn-royal {
+        background: linear-gradient(135deg, #ff9933 0%, #ffb74d 70%, #ff9933 100%);
+        position: relative;
+        overflow: hidden;
+        font-weight: 600;
+        padding: 1rem 2rem;
+      }
+
+      .btn-royal::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.6s;
+      }
+
+      .btn-royal:hover::before {
+        left: 100%;
+      }
+
+      /* Section headers */
+      .form-section h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1E3A8A;
+        margin-bottom: 2rem;
+        line-height: 1.3;
+        position: relative;
+        padding-bottom: 1rem;
+      }
+
+      .form-section h3::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 3rem;
+        height: 3px;
+        background: linear-gradient(135deg, #ff9933 0%, #ffb74d 100%);
+        border-radius: 2px;
+      }
+
+      .floating-elements {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .floating-elements::before,
+      .floating-elements::after {
+        content: '';
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(255, 153, 51, 0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+      }
+
+      .floating-elements::before {
+        top: 10%;
+        left: 10%;
+        animation-delay: 0s;
+      }
+
+      .floating-elements::after {
+        bottom: 10%;
+        right: 10%;
+        animation-delay: 3s;
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+      }
+
+      .form-input {
+        transition: all 0.3s ease;
+      }
+
+      .form-input:focus {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 153, 51, 0.15);
+      }
+
+      .input-group {
+        position: relative;
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        color: #9CA3AF;
+        transition: color 0.3s ease;
+      }
+
+      .form-input:focus + .input-icon,
+      .form-input:not(:placeholder-shown) + .input-icon {
+        color: #FF9933;
+      }
+
+      .form-input-with-icon {
+        padding-left: 2.75rem;
+      }
+
+      .strength-indicator {
+        height: 4px;
+        background: #E5E7EB;
+        border-radius: 2px;
+        margin-top: 0.5rem;
+        overflow: hidden;
+      }
+
+      .strength-bar {
+        height: 100%;
+        transition: all 0.3s ease;
+        border-radius: 2px;
+      }
+
+      .strength-weak { background: #EF4444; width: 25%; }
+      .strength-fair { background: #F59E0B; width: 50%; }
+      .strength-good { background: #10B981; width: 75%; }
+      .strength-strong { background: #059669; width: 100%; }
+
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        color: white;
+        font-weight: 500;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+      }
+
+      .notification.show {
+        transform: translateX(0);
+      }
+
+      .notification.success {
+        background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      }
+
+      .notification.error {
+        background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+      }
+
+      .loading-spinner {
+        width: 20px;
+        height: 20px;
+        border: 2px solid transparent;
+        border-top: 2px solid currentColor;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      .progress-indicator {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+      }
+
+      .progress-step {
+        flex: 1;
+        height: 4px;
+        background: #E5E7EB;
+        margin: 0 2px;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+      }
+
+      .progress-step.active {
+        background: linear-gradient(135deg, #ff9933 0%, #ffb74d 100%);
+      }
+
+      .step-label {
+        text-align: center;
+        font-size: 0.875rem;
+        color: #6B7280;
+        margin-top: 0.5rem;
+        font-weight: 500;
+      }
+
+      .step-label.active {
+        color: #FF9933;
+      }
+
+      .form-section {
+        display: none;
+      }
+
+      .form-section.active {
+        display: block;
+      }
+
+      .emergency-contact-card {
+        background: linear-gradient(135deg, #FEF3E2 0%, #FDE68A 100%);
+        border: 2px dashed #FF9933;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 1rem;
+      }
+
+      @media (max-width: 768px) {
+        .signup-container {
+          padding: 1rem 0.5rem;
+          min-height: 100vh;
+        }
+        
+        .card-royal {
+          padding: 1.5rem;
+          margin: 0;
+          border-radius: 1rem;
+        }
+        
+        .grid.md\\:grid-cols-2 {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+        
+        .text-center.mb-8 h1 {
+          font-size: 2.5rem !important;
+          line-height: 1.2;
+          margin-bottom: 1rem;
+        }
+        
+        .text-center.mb-8 {
+          margin-bottom: 2rem;
+        }
+        
+        .progress-indicator {
+          margin-bottom: 2rem;
+          padding: 0;
+        }
+        
+        .step-label {
+          font-size: 0.75rem;
+          margin-top: 0.75rem;
+        }
+        
+        .w-full.max-w-4xl {
+          max-width: 100% !important;
+          width: 100%;
+        }
+        
+        .emergency-contact-card {
+          padding: 1.5rem;
+          margin-top: 1rem;
+        }
+        
+        .form-input {
+          padding: 0.875rem 1rem;
+          font-size: 0.9rem;
+        }
+        
+        .form-input-with-icon {
+          padding-left: 2.75rem;
+        }
+        
+        .input-group {
+          margin-bottom: 1.5rem;
+        }
+        
+        .input-group label {
+          font-size: 0.8rem;
+          margin-bottom: 0.5rem;
+        }
+        
+        .btn-royal, .login-btn {
+          padding: 0.875rem 1.5rem;
+          font-size: 0.95rem;
+        }
+        
+        .floating-elements {
+          display: none;
+        }
+        
+        .form-section {
+          min-height: auto;
+          padding: 0.5rem 0;
+        }
+        
+        .form-section h3 {
+          font-size: 1.25rem;
+          margin-bottom: 1.5rem;
+        }
+        
+        .emergency-contact-card h4 {
+          font-size: 1rem;
+        }
+        
+        .grid.grid-cols-1.md\\:grid-cols-2.gap-6 {
+          gap: 1.25rem;
+        }
+        
+        /* Fix text overlapping */
+        * {
+          line-height: 1.5 !important;
+        }
+        
+        p, div, span {
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+        }
+        
+        .flex.justify-between {
+          flex-direction: column;
+          gap: 1rem;
+        }
+        
+        .flex.justify-between .btn-royal {
+          width: 100%;
+        }
+        
+        .flex.justify-between button:first-child {
+          order: 2;
+        }
+        
+        .flex.justify-between button:last-child {
+          order: 1;
+        }
+        
+        /* Better mobile spacing */
+        .space-y-4 > * + * {
+          margin-top: 1.25rem;
+        }
+        
+        .space-y-6 > * + * {
+          margin-top: 1.75rem;
+        }
+      }
+
+      .login-btn {
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid #FF9933;
+        color: #FF9933;
+        transition: all 0.4s ease;
+      }
+
+      .login-btn:hover {
+        background: linear-gradient(135deg, #ff9933 0%, #ffb74d 100%);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 153, 51, 0.3);
+      }
+    </style>
+</head>
+<body class="royal-texture">
+  <div class="floating-elements"></div>
+  
+  <div class="signup-container hero-pattern">
+    <div class="w-full max-w-4xl">
+      <!-- Logo Section -->
+       <div class=" text-center mb-8" style="margin-bottom:1.5rem;">
+        <h1 class="logo-title" style="font-size:3rem; font-weight:800; background: linear-gradient(135deg,#FF9933 0%, #FFB74D 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Surakshā</h1>
+        <p class="logo-subtitle" style="color:#6B7280; font-weight:500;">Join thousands of safe travelers exploring India</p>
+      </div>
+      
+      <!-- Main Signup Card -->
+      <div class="card-royal rounded-2xl p-8 shadow-royal">
+        <!-- Header -->
+        <div class="text-center mb-8">
+          <div class="gradient-saffron w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-royal">
+            <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"></path>
+            </svg>
+          </div>
+          <h2 class="text-3xl font-bold text-royalblue mb-2">
+            Create Your Account
+          </h2>
+          <p class="text-gray-600">
+            Start your safe journey across India today
+          </p>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="progress-indicator">
+          <div class="flex-1">
+            <div class="progress-step active" id="step1"></div>
+            <div class="step-label active">Personal Info</div>
+          </div>
+          <div class="flex-1">
+            <div class="progress-step" id="step2"></div>
+            <div class="step-label">Contact Details</div>
+          </div>
+          <div class="flex-1">
+            <div class="progress-step" id="step3"></div>
+            <div class="step-label">Emergency Contact</div>
+          </div>
+        </div>
+        
+        <!-- Signup Form -->
+        <form onsubmit="processSignup(event)" id="signupForm">
+          <!-- Step 1: Personal Information -->
+          <div class="form-section active" id="section1">
+            <h3 class="text-xl font-semibold text-royalblue mb-6">Personal Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div class="input-group">
+                <label class="block text-sm font-semibold text-royalblue mb-2">Full Name</label>
+                <div class="relative">
+                  <input
+                    type="text"
+                    id="signupName"
+                    required
+                    class="form-input form-input-with-icon w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-saffron focus:border-saffron outline-none"
+                    placeholder="Enter your full name"
+                  />
+                  
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label class="block text-sm font-semibold text-royalblue mb-2">Date of Birth</label>
+                <div class="relative">
+                  <input
+                    type="date"
+                    id="signupDOB"
+                    required
+                    class="form-input form-input-with-icon w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-saffron focus:border-saffron outline-none"
+                  />
+                  
+                </div>
+              </div>
+
+              <div class="input-group md:col-span-2">
+                <label class="block text-sm font-semibold text-royalblue mb-2">Passport/Aadhaar Number</label>
+                <div class="relative">
+                  <input
+                    type="text"
+                    id="signupPassport"
+                    required
+                    class="form-input form-input-with-icon w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-saffron focus:border-saffron outline-none"
+                    placeholder="Enter your Passport or Aadhaar number"
+                  />
+                  
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label class="block text-sm font-semibold text-royalblue mb-2">Current Address</label>
+                <div class="relative">
+                  <input
+                    type="text"
+                    id="signupLocation"
+                    required
+                    class="form-input form-input-with-icon w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-saffron focus:border-saffron outline-none"
+                    placeholder="Enter your current address(if same as adhaar then fill that one)"
+                  />
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label class="block text-sm font-semibold text-royalblue mb-2">Gender</label>
+                <div class="relative">
+                  <select
+                    id="signupGender"
+                    required
+                    class="form-input w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-saffron focus:border-saffron outline-none"
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex justify-end mt-8">
+              <button
+                type="button"
+                onclick="nextStep(2)"
+                class="btn-royal text-white px-8 py-3 rounded-xl font-semibold text-lg shadow-royal"
+              >
+                Next Step
+                <svg class="w-5 h-5 inline ml-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 2: Contact Details -->
+          <div class="form-section" id="section2">
+            <h3 class="text-xl font-semibold text-royalblue mb-6">Contact Details</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="input-group md:col-span-2">
+                <label class="block text-sm font-semibold text-royalblue mb-2">Email Address</label>
+                <div class="relative">
+                  <input
+                    type="email"
+                    id="signupEmail"
+                    required
+                    class="form-input form-input-with-icon w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-saffron focus:border-saffron outline-none"
+                    placeholder="Enter your email address"
+                  />
+                  
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label class="block text-sm font-semibold text-royalblue mb-2">Mobile Number</label>
+                <div class="relative">
+                  <input
+                    type="tel"
+                    id="signupMobile"
+                    required
+                    pattern="[0-9]{10}"
+                    class="form-input form-input-with-icon w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-saffron focus:border-saffron outline-none"
+                    placeholder="Enter 10-digit mobile number"
+                  />
+                  
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label class="block text-sm font-semibold text-royalblue mb-2">Alternative Phone</label>
+                <div class="relative">
+                  <input
+                    type="tel"
+                    id="signupAltPhone"
+                    class="form-input form-input-with-icon w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-saffron focus:border-saffron outline-none"
+                    placeholder="Alternative contact number (optional)"
+                  />
+                  
+                </div>
+              </div>
+
+              <div class="input-group md:col-span-2">
+                <label class="block text-sm font-semibold text-royalblue mb-2">Password</label>
+                <div class="relative">
+                  <input
+                    type="password"
+                    id="signupPassword"
+                    required
+                    class="form-input form-input-with-icon w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-saffron focus:border-saffron outline-none"
+                    placeholder="Create a strong password"
+                    oninput="checkPasswordStrength(this.value)"
+                  />
+                  
+                  <button
+                    type="button"
+                    onclick="togglePasswordVisibility()"
+                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-saffron transition-colors"
+                  >
+                    <svg id="eyeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
+                  </button>
+                </div>
+                <div id="strengthIndicator" class="strength-indicator hidden">
+                  <div id="strengthBar" class="strength-bar"></div>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">Password should be at least 8 characters with uppercase, lowercase, numbers, and symbols.</p>
+              </div>
+
+              <div class="input-group md:col-span-2">
+                <label class="block text-sm font-semibold text-royalblue mb-2">Confirm Password</label>
+                <div class="relative">
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    required
+                    class="form-input form-input-with-icon w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-saffron focus:border-saffron outline-none"
+                    placeholder="Confirm your password"
+                    oninput="checkPasswordMatch()"
+                  />
+                  
+                </div>
+                <div id="passwordMatch" class="text-xs mt-1 hidden"></div>
+              </div>
+            </div>
+
+            <div class="flex justify-between mt-8">
+              <button
+                type="button"
+                onclick="prevStep(1)"
+                class="border-2 border-gray-300 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors"
+              >
+                <svg class="w-5 h-5 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                Previous
+              </button>
+              <button
+                type="button"
+                onclick="nextStep(3)"
+                class="btn-royal text-white px-8 py-3 rounded-xl font-semibold text-lg shadow-royal"
+              >
+                Next Step
+                <svg class="w-5 h-5 inline ml-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 3: Emergency Contact -->
+          <div class="form-section" id="section3">
+            <h3 class="text-xl font-semibold text-royalblue mb-4">Emergency Contact Information</h3>
+            <p class="text-gray-600 mb-6">This information will be used to contact someone in case of an emergency during your travels.</p>
+            
+            <div class="emergency-contact-card">
+              <div class="flex items-center mb-4">
+                <div class="gradient-saffron w-12 h-12 rounded-full flex items-center justify-center mr-3">
+                  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="text-lg font-semibold text-royalblue">Primary Emergency Contact</h4>
+                  <p class="text-sm text-gray-600">Someone who can be reached 24/7 in case of emergency</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="input-group">
+                  <label class="block text-sm font-semibold text-royalblue mb-2">Emergency Contact Name</label>
+                  <div class="relative">
+                    <input
+                      type="text"
+                      id="signupEmergencyName"
+                      required
+                      class="form-input form-input-with-icon w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-saffron focus:border-saffron outline-none"
+                      placeholder="Full name of emergency contact"
+                    />
+                    
+                  </div>
+                </div>
+
+                <div class="input-group">
+                  <label class="block text-sm font-semibold text-royalblue mb-2">Relationship</label>
+                  <div class="relative">
+                    <select
+                      id="signupEmergencyRelation"
+                      required
+                      class="form-input w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-saffron focus:border-saffron outline-none"
+                    >
+                      <option value="">Select relationship</option>
+                      <option value="parent">Parent</option>
+                      <option value="spouse">Spouse</option>
+                      <option value="sibling">Sibling</option>
+                      <option value="friend">Friend</option>
+                      <option value="relative">Relative</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="input-group">
+                  <label class="block text-sm font-semibold text-royalblue mb-2">Emergency Contact Phone</label>
+                  <div class="relative">
+                    <input
+                      type="tel"
+                      id="signupEmergencyPhone"
+                      required
+                      class="form-input form-input-with-icon w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-saffron focus:border-saffron outline-none"
+                      placeholder="Emergency contact number"
+                    />
+                  </div>
+                </div>
+
+                <div class="input-group">
+                  <label class="block text-sm font-semibold text-royalblue mb-2">Emergency Contact Email</label>
+                  <div class="relative">
+                    <input
+                      type="email"
+                      id="signupEmergencyEmail"
+                      required
+                      class="form-input form-input-with-icon w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-saffron focus:border-saffron outline-none"
+                      placeholder="Emergency contact email"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Terms and Conditions -->
+            <div class="mt-8 space-y-4">
+              <div class="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  id="termsCheck"
+                  required
+                  class="mt-1 rounded border-gray-300 text-saffron focus:ring-saffron"
+                />
+                <label for="termsCheck" class="text-sm text-gray-600">
+                  I agree to the <a href="#" class="text-saffron hover:text-orange-600 font-medium">Terms of Service</a> 
+                  and <a href="#" class="text-saffron hover:text-orange-600 font-medium">Privacy Policy</a>
+                </label>
+              </div>
+              
+              <div class="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  id="emergencyCheck"
+                  required
+                  class="mt-1 rounded border-gray-300 text-saffron focus:ring-saffron"
+                />
+                <label for="emergencyCheck" class="text-sm text-gray-600">
+                  I authorize Surakshā to contact my emergency contact in case of safety concerns or emergencies
+                </label>
+              </div>
+
+              <div class="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  id="updatesCheck"
+                  class="mt-1 rounded border-gray-300 text-saffron focus:ring-saffron"
+                />
+                <label for="updatesCheck" class="text-sm text-gray-600">
+                  I would like to receive safety updates and travel alerts (optional)
+                </label>
+              </div>
+            </div>
+
+            <div class="flex justify-between mt-8">
+              <button
+                type="button"
+                onclick="prevStep(2)"
+                class="border-2 border-gray-300 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors"
+              >
+                <svg class="w-5 h-5 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                Previous
+              </button>
+              <button
+                type="submit"
+                id="signupBtn"
+                class="btn-royal text-white px-8 py-3 rounded-xl font-semibold text-lg shadow-royal flex items-center"
+              >
+                <span id="signupBtnText">Create My Account</span>
+                <div id="signupSpinner" class="loading-spinner ml-2 hidden"></div>
+              </button>
+            </div>
+          </div>
+        </form>
+        
+        <!-- Already have account -->
+        <div class="relative my-8">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-200"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-4 bg-white text-gray-500 font-medium">Already have an account?</span>
+          </div>
+        </div>
+        
+        <div class="text-center">
+          <button
+            type="button"
+            onclick="navigateTo('/login')"
+            class="login-btn w-full py-3 rounded-xl font-semibold text-lg transition-all duration-300"
+          >
+            Sign In to Your Account
+          </button>
+        </div>
+
+        <!-- Trust Indicators -->
+        <div class="mt-8 pt-6 border-t border-gray-100">
+          <div class="flex items-center justify-center space-x-6 text-xs text-gray-500">
+            <div class="flex items-center space-x-1">
+              <svg class="w-4 h-4 text-saffron" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span class="font-medium">256-bit SSL</span>
+            </div>
+            <div class="flex items-center space-x-1">
+              <svg class="w-4 h-4 text-saffron" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+              </svg>
+              <span class="font-medium">GDPR Compliant</span>
+            </div>
+            <div class="flex items-center space-x-1">
+              <svg class="w-4 h-4 text-saffron" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span class="font-medium">Data Protected</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="text-center mt-8">
+        <p class="text-xs text-gray-500">
+          © 2025 Surakshā. Your trusted companion for safe travel across India.
+        </p>
+        <div class="flex justify-center space-x-4 mt-2">
+          <a href="#" class="text-xs text-saffron hover:text-orange-600 transition-colors">Privacy Policy</a>
+          <a href="#" class="text-xs text-saffron hover:text-orange-600 transition-colors">Terms of Service</a>
+          <a href="#" class="text-xs text-saffron hover:text-orange-600 transition-colors">Help Center</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Container -->
+  <div id="notificationContainer"></div>
+
+  <script>
+    let currentStep = 1;
+
+    function nextStep(step) {
+      if (validateCurrentStep()) {
+        hideStep(currentStep);
+        showStep(step);
+        updateProgress(step);
+        currentStep = step;
+      }
+    }
+
+    function prevStep(step) {
+      hideStep(currentStep);
+      showStep(step);
+      updateProgress(step);
+      currentStep = step;
+    }
+
+    function showStep(step) {
+      document.getElementById(`section${step}`).classList.add('active');
+    }
+
+    function hideStep(step) {
+      document.getElementById(`section${step}`).classList.remove('active');
+    }
+
+    function updateProgress(step) {
+      // Update progress bars
+      for (let i = 1; i <= 3; i++) {
+        const progressStep = document.getElementById(`step${i}`);
+        const label = progressStep.nextElementSibling;
+        
+        if (i <= step) {
+          progressStep.classList.add('active');
+          label.classList.add('active');
+        } else {
+          progressStep.classList.remove('active');
+          label.classList.remove('active');
+        }
+      }
+    }
+
+    function validateCurrentStep() {
+      const section = document.getElementById(`section${currentStep}`);
+      const requiredFields = section.querySelectorAll('input[required], select[required]');
+      
+      for (let field of requiredFields) {
+        if (!field.value.trim()) {
+          showNotification(`Please fill in all required fields in this step.`, 'error');
+          field.focus();
+          return false;
+        }
+      }
+
+      // Additional validation for step 2 (password)
+      if (currentStep === 2) {
+        const password = document.getElementById('signupPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        if (password !== confirmPassword) {
+          showNotification('Passwords do not match!', 'error');
+          return false;
+        }
+        
+        if (password.length < 8) {
+          showNotification('Password must be at least 8 characters long!', 'error');
+          return false;
+        }
+
+        if (!isValidEmail(document.getElementById('signupEmail').value)) {
+          showNotification('Please enter a valid email address!', 'error');
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    function processSignup(event) {
+  event.preventDefault();
+  
+  if (!validateCurrentStep()) {
+    return;
+  }
+
+  // Check if all checkboxes are checked
+  const termsCheck = document.getElementById('termsCheck');
+  const emergencyCheck = document.getElementById('emergencyCheck');
+  
+  if (!termsCheck.checked || !emergencyCheck.checked) {
+    showNotification('Please accept the required terms and conditions.', 'error');
+    return;
+  }
+  
+  // Show loading state
+  const signupBtn = document.getElementById('signupBtn');
+  const signupBtnText = document.getElementById('signupBtnText');
+  const signupSpinner = document.getElementById('signupSpinner');
+  
+  signupBtnText.textContent = 'Creating your account...';
+  signupSpinner.classList.remove('hidden');
+  signupBtn.disabled = true;
+  signupBtn.classList.add('opacity-75');
+  
+  // Collect form data
+  const formData = {
+    name: document.getElementById('signupName').value,
+    dob: document.getElementById('signupDOB').value,
+    passport: document.getElementById('signupPassport').value,
+    location: document.getElementById('signupLocation').value,
+    gender: document.getElementById('signupGender').value,
+    email: document.getElementById('signupEmail').value,
+    mobile: document.getElementById('signupMobile').value,
+    altPhone: document.getElementById('signupAltPhone').value,
+    password: document.getElementById('signupPassword').value,
+    emergencyName: document.getElementById('signupEmergencyName').value,
+    emergencyRelation: document.getElementById('signupEmergencyRelation').value,
+    emergencyPhone: document.getElementById('signupEmergencyPhone').value,
+    emergencyEmail: document.getElementById('signupEmergencyEmail').value,
+    wantsUpdates: document.getElementById('updatesCheck').checked
+  };
+  
+  // Simulate API call
+  setTimeout(() => {
+    showNotification('Account created successfully! Redirecting to login...', 'success');
+    
+    // Redirect to login page after short delay
+    setTimeout(() => {
+      window.location.href = '/login';
+    }, 2000);
+    
+  }, 3000);
+}
+
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById('signupPassword');
+      const eyeIcon = document.getElementById('eyeIcon');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.innerHTML = `
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+        `;
+      } else {
+        passwordInput.type = 'password';
+        eyeIcon.innerHTML = `
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+        `;
+      }
+    }
+
+    function checkPasswordStrength(password) {
+      const strengthIndicator = document.getElementById('strengthIndicator');
+      const strengthBar = document.getElementById('strengthBar');
+      
+      if (password.length === 0) {
+        strengthIndicator.classList.add('hidden');
+        return;
+      }
+      
+      strengthIndicator.classList.remove('hidden');
+      
+      let strength = 0;
+      if (password.length >= 8) strength++;
+      if (/[A-Z]/.test(password)) strength++;
+      if (/[0-9]/.test(password)) strength++;
+      if (/[^A-Za-z0-9]/.test(password)) strength++;
+      
+      strengthBar.className = 'strength-bar';
+      switch (strength) {
+        case 1:
+          strengthBar.classList.add('strength-weak');
+          break;
+        case 2:
+          strengthBar.classList.add('strength-fair');
+          break;
+        case 3:
+          strengthBar.classList.add('strength-good');
+          break;
+        case 4:
+          strengthBar.classList.add('strength-strong');
+          break;
+      }
+    }
+
+    function checkPasswordMatch() {
+      const password = document.getElementById('signupPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const matchIndicator = document.getElementById('passwordMatch');
+      
+      if (confirmPassword.length === 0) {
+        matchIndicator.classList.add('hidden');
+        return;
+      }
+      
+      matchIndicator.classList.remove('hidden');
+      
+      if (password === confirmPassword) {
+        matchIndicator.textContent = '✓ Passwords match';
+        matchIndicator.className = 'text-xs mt-1 text-green-600';
+      } else {
+        matchIndicator.textContent = '✗ Passwords do not match';
+        matchIndicator.className = 'text-xs mt-1 text-red-600';
+      }
+    }
+
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
+    function showNotification(message, type = 'success') {
+      const container = document.getElementById('notificationContainer');
+      const notification = document.createElement('div');
+      
+      notification.className = `notification ${type}`;
+      notification.innerHTML = `
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            ${type === 'success' ? 
+              '<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>' :
+              '<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>'
+            }
+          </div>
+          <div class="ml-2">
+            <p class="text-sm font-medium">${message}</p>
+          </div>
+          <div class="ml-auto pl-3">
+            <div class="-mx-1.5 -my-1.5">
+              <button onclick="hideNotification(this)" class="inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
+                <span class="sr-only">Dismiss</span>
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      container.appendChild(notification);
+      
+      // Show notification
+      setTimeout(() => {
+        notification.classList.add('show');
+      }, 100);
+      
+      // Auto hide after 5 seconds
+      setTimeout(() => {
+        hideNotification(notification.querySelector('button'));
+      }, 5000);
+    }
+
+    function hideNotification(button) {
+      const notification = button.closest('.notification');
+      notification.classList.remove('show');
+      setTimeout(() => {
+        notification.remove();
+      }, 300);
+    }
+
+    // Add some interactive effects
+    document.querySelectorAll('.form-input').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.classList.add('scale-105');
+      });
+      
+      input.addEventListener('blur', function() {
+        this.parentElement.classList.remove('scale-105');
+      });
+    });
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Focus on first input
+      document.getElementById('signupName').focus();
+      
+      // Welcome message
+      setTimeout(() => {
+        showNotification('Welcome! Let\'s create your Surakshā account in just 3 easy steps.', 'success');
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

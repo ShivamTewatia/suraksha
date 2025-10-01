@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourism News & Safety Updates - Suraksha</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background: linear-gradient(135deg, #fff8e7 0%, #fff3e0 100%);
+        background-attachment: fixed;
+      }
+
+      .royal-texture {
+        background-image: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23FFB74D" fill-opacity="0.1"><circle cx="30" cy="30" r="2"/></g></svg>');
+      }
+
+      .gradient-saffron {
+        background: linear-gradient(135deg, #ff9933 0%, #ffb74d 100%);
+      }
+
+      .shadow-royal {
+        box-shadow: 0 10px 25px rgba(255, 153, 51, 0.2);
+      }
+
+      .btn-royal {
+        background: linear-gradient(135deg, #ff9933 0%, #ffb74d 100%);
+        transition: all 0.3s ease;
+      }
+
+      .btn-royal:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255, 153, 51, 0.3);
+      }
+
+      .card-royal {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 153, 51, 0.2);
+      }
+
+      .news-card {
+        transition: all 0.3s ease;
+      }
+
+      .news-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(184, 134, 11, 0.25);
+      }
+
+      .incident-badge {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      }
+
+      .update-badge {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      }
+
+      .advisory-badge {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      }
+
+      .news-badge {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      }
+
+      .filter-active {
+        background: linear-gradient(135deg, #ff9933 0%, #ffb74d 100%);
+        color: white;
+      }
+
+      .loading-spinner {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #ff9933;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      .location-input {
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid rgba(255, 153, 51, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .location-input:focus {
+        border-color: #ff9933;
+        box-shadow: 0 0 0 3px rgba(255, 153, 51, 0.1);
+      }
+
+      /* Custom color classes */
+      .text-saffron { color: #FF9933; }
+      .text-marigold { color: #FFB74D; }
+      .text-deepgold { color: #B8860B; }
+      .text-royalblue { color: #1E3A8A; }
+      .bg-saffron { background-color: #FF9933; }
+      .bg-marigold { background-color: #FFB74D; }
+      .bg-deepgold { background-color: #B8860B; }
+      .bg-royalblue { background-color: #1E3A8A; }
+      .border-saffron { border-color: #FF9933; }
+      .border-marigold { border-color: #FFB74D; }
+      .border-deepgold { border-color: #B8860B; }
+      .border-royalblue { border-color: #1E3A8A; }
+
+      .hover\:bg-saffron:hover { background-color: #FF9933; }
+      .hover\:text-saffron:hover { color: #FF9933; }
+      .hover\:bg-royalblue:hover { background-color: #1E3A8A; }
+    </style>
+</head>
+<body class="royal-texture">
+    <%-include("nav.ejs") %>
+    <header class="gradient-saffron shadow-royal sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <h1 class="text-2xl font-bold text-white">Surakshā News</h1>
+                    <div class="text-sm text-white opacity-90">Tourism Safety Updates</div>
+                </div>
+                <button onclick="window.location.reload()" class="text-white hover:text-yellow-200 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Controls Section -->
+        <div class="card-royal rounded-xl p-6 shadow-royal mb-8">
+            <div class="flex flex-col lg:flex-row gap-6 items-center">
+                <!-- Location Filter -->
+                <div class="flex-1 w-full">
+                    <label class="block text-sm font-medium text-royalblue mb-2">Filter by Location</label>
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="locationInput" 
+                            placeholder="Enter city, state or leave empty for all India news..."
+                            class="location-input w-full px-4 py-3 rounded-lg focus:outline-none"
+                        />
+                        <button 
+                            onclick="clearLocation()" 
+                            class="absolute right-3 top-3 text-gray-400 hover:text-red-500 transition-colors"
+                            title="Clear location"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Current Location Button -->
+                <div class="flex flex-col items-center">
+                    <label class="block text-sm font-medium text-royalblue mb-2">Quick Access</label>
+                    <button 
+                        onclick="useCurrentLocation()" 
+                        class="btn-royal text-white px-6 py-3 rounded-lg font-semibold flex items-center space-x-2"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        </svg>
+                        <span>My Location</span>
+                    </button>
+                </div>
+
+                <!-- Search Button -->
+                <div class="flex flex-col items-center">
+                    <label class="block text-sm font-medium text-royalblue mb-2">Search</label>
+                    <button 
+                        onclick="searchNews()" 
+                        class="bg-royalblue text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-800 transition-colors flex items-center space-x-2"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <span>Search</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Category Filters -->
+            <div class="mt-6 pt-6 border-t border-gray-200">
+                <label class="block text-sm font-medium text-royalblue mb-3">Filter by Category</label>
+                <div class="flex flex-wrap gap-3">
+                    <button onclick="filterByCategory('all')" class="filter-btn filter-active px-4 py-2 rounded-full text-sm font-medium transition-all">
+                        All News
+                    </button>
+                    <button onclick="filterByCategory('incident')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-100 hover:bg-gray-200 transition-all">
+                        Safety Incidents
+                    </button>
+                    <button onclick="filterByCategory('advisory')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-100 hover:bg-gray-200 transition-all">
+                        Travel Advisories
+                    </button>
+                    <button onclick="filterByCategory('update')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-100 hover:bg-gray-200 transition-all">
+                        Infrastructure Updates
+                    </button>
+                    <button onclick="filterByCategory('news')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-100 hover:bg-gray-200 transition-all">
+                        Tourism News
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="text-center py-12 hidden">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <p class="text-royalblue font-medium">Fetching latest news and updates...</p>
+        </div>
+
+        <!-- Current Location Display -->
+        <div id="currentLocationDisplay" class="card-royal rounded-xl p-4 shadow-royal mb-6 hidden">
+            <div class="flex items-center space-x-3">
+                <svg class="w-5 h-5 text-saffron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                </svg>
+                <span class="text-royalblue font-medium">Showing news for: </span>
+                <span id="currentLocationText" class="text-saffron font-semibold"></span>
+            </div>
+        </div>
+
+        <!-- News Grid -->
+        <div id="newsContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- News items will be populated by JavaScript -->
+        </div>
+
+        <!-- No Results State -->
+        <div id="noResultsState" class="text-center py-12 hidden">
+            <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.5-.673-6.33-1.834C7.16 11.906 8 10.566 8 9V6a4 4 0 118 0v3c0 1.566.84 2.906 2.33 4.166-.593.319-1.238.574-1.916.748A7.962 7.962 0 0112 15z"></path>
+            </svg>
+            <h3 class="text-xl font-semibold text-royalblue mb-2">No News Found</h3>
+            <p class="text-gray-600">Try adjusting your location or category filters to find relevant news.</p>
+        </div>
+    </main>
+
+    <script>
+        let currentCategory = 'all';
+        let newsData = [];
+
+        // Sample news data - In a real implementation, this would come from an API
+        const sampleNewsData = [
+            {
+                id: 1,
+                title: "Flash Flood Warning Issued for Kedarnath Pilgrimage Route",
+                location: "Kedarnath, Uttarakhand",
+                state: "Uttarakhand",
+                category: "advisory",
+                date: "2025-09-17",
+                time: "14:30",
+                summary: "Heavy rainfall in the region has prompted authorities to issue a flash flood warning for pilgrims visiting Kedarnath. Alternative routes have been suggested.",
+                severity: "high",
+                source: "Uttarakhand Tourism Board"
+            },
+            {
+                id: 2,
+                title: "Tourist Rescued from Trekking Accident in Himachal Pradesh",
+                location: "Manali, Himachal Pradesh",
+                state: "Himachal Pradesh",
+                category: "incident",
+                date: "2025-09-16",
+                time: "09:15",
+                summary: "A 28-year-old tourist from Delhi was successfully rescued after suffering injuries during a trek near Solang Valley. Emergency response teams acted swiftly.",
+                severity: "medium",
+                source: "Himachal Pradesh Police"
+            },
+            {
+                id: 3,
+                title: "New Digital Payment Systems Launched at Major Tourist Sites",
+                location: "Agra, Uttar Pradesh",
+                state: "Uttar Pradesh",
+                category: "update",
+                date: "2025-09-16",
+                time: "11:00",
+                summary: "Taj Mahal and other ASI monuments in Agra now accept UPI payments for tickets, making visits more convenient for domestic and international tourists.",
+                severity: "low",
+                source: "Archaeological Survey of India"
+            },
+            {
+                id: 4,
+                title: "Wildlife Sanctuary Reports Increased Leopard Sightings",
+                location: "Jim Corbett National Park, Uttarakhand",
+                state: "Uttarakhand",
+                category: "advisory",
+                date: "2025-09-15",
+                time: "16:45",
+                summary: "Forest officials advise tourists to maintain extra caution during safari tours following increased leopard activity in popular zones of the park.",
+                severity: "medium",
+                source: "Forest Department"
+            },
+            {
+                id: 5,
+                title: "Kashmir Valley Opens New Eco-Tourism Trail",
+                location: "Gulmarg, Kashmir",
+                state: "Jammu and Kashmir",
+                category: "news",
+                date: "2025-09-15",
+                time: "08:30",
+                summary: "A new sustainable tourism trail has been inaugurated in Gulmarg, promoting eco-friendly travel and supporting local communities.",
+                severity: "low",
+                source: "J&K Tourism Department"
+            },
+            {
+                id: 6,
+                title: "Monsoon Landslide Blocks Highway to Popular Hill Station",
+                location: "Shimla, Himachal Pradesh",
+                state: "Himachal Pradesh",
+                category: "incident",
+                date: "2025-09-14",
+                time: "22:00",
+                summary: "A landslide on NH-5 has temporarily blocked access to Shimla. Authorities are working to clear the debris and restore traffic.",
+                severity: "high",
+                source: "HP Road Transport Authority"
+            },
+            {
+                id: 7,
+                title: "Enhanced Security Measures at Delhi's Red Fort",
+                location: "Delhi",
+                state: "Delhi",
+                category: "update",
+                date: "2025-09-14",
+                time: "12:20",
+                summary: "New security screening procedures have been implemented at Red Fort to ensure visitor safety while maintaining the heritage site's accessibility.",
+                severity: "low",
+                source: "Delhi Police"
+            },
+            {
+                id: 8,
+                title: "Beach Safety Alert Issued for Goa Coastline",
+                location: "Goa",
+                state: "Goa",
+                category: "advisory",
+                date: "2025-09-13",
+                time: "07:45",
+                summary: "Strong currents and high tides prompt beach safety warnings. Lifeguards on high alert at popular beaches including Baga and Calangute.",
+                severity: "high",
+                source: "Goa Tourism Department"
+            }
+        ];
+
+        // Initialize the news section
+        function initializeNews() {
+            newsData = sampleNewsData;
+            displayNews(newsData);
+        }
+
+        // Display news items
+        function displayNews(news) {
+            const container = document.getElementById('newsContainer');
+            const noResults = document.getElementById('noResultsState');
+            
+            if (news.length === 0) {
+                container.classList.add('hidden');
+                noResults.classList.remove('hidden');
+                return;
+            }
+            
+            container.classList.remove('hidden');
+            noResults.classList.add('hidden');
+            
+            container.innerHTML = news.map(item => `
+                <div class="news-card card-royal rounded-xl p-6 shadow-royal">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="${getCategoryBadgeClass(item.category)} text-white px-3 py-1 rounded-full text-xs font-semibold uppercase">
+                            ${getCategoryName(item.category)}
+                        </span>
+                        <span class="text-xs text-gray-500 font-medium">
+                            ${formatDate(item.date)} at ${item.time}
+                        </span>
+                    </div>
+                    
+                    <h3 class="text-lg font-bold text-royalblue mb-2 line-clamp-2">${item.title}</h3>
+                    
+                    <div class="flex items-center space-x-2 mb-3">
+                        <svg class="w-4 h-4 text-saffron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        </svg>
+                        <span class="text-sm text-gray-600 font-medium">${item.location}</span>
+                    </div>
+                    
+                    <p class="text-gray-700 text-sm mb-4 line-clamp-3">${item.summary}</p>
+                    
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs text-gray-500">Source:</span>
+                            <span class="text-xs text-royalblue font-medium">${item.source}</span>
+                        </div>
+                        <span class="severity-indicator w-3 h-3 rounded-full ${getSeverityColor(item.severity)}" title="${item.severity} priority"></span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Get category badge styling
+        function getCategoryBadgeClass(category) {
+            const classes = {
+                'incident': 'incident-badge',
+                'advisory': 'advisory-badge',
+                'update': 'update-badge',
+                'news': 'news-badge'
+            };
+            return classes[category] || 'news-badge';
+        }
+
+        // Get category display name
+        function getCategoryName(category) {
+            const names = {
+                'incident': 'Incident',
+                'advisory': 'Advisory',
+                'update': 'Update',
+                'news': 'News'
+            };
+            return names[category] || 'News';
+        }
+
+        // Get severity color
+        function getSeverityColor(severity) {
+            const colors = {
+                'high': 'bg-red-500',
+                'medium': 'bg-yellow-500',
+                'low': 'bg-green-500'
+            };
+            return colors[severity] || 'bg-gray-400';
+        }
+
+        // Format date for display
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-IN', { 
+                day: 'numeric', 
+                month: 'short', 
+                year: 'numeric' 
+            });
+        }
+
+        // Filter by category
+        function filterByCategory(category) {
+            currentCategory = category;
+            
+            // Update button styles
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('filter-active');
+                btn.classList.add('bg-gray-100', 'hover:bg-gray-200');
+            });
+            
+            event.target.classList.add('filter-active');
+            event.target.classList.remove('bg-gray-100', 'hover:bg-gray-200');
+            
+            // Filter and display news
+            const filtered = category === 'all' ? newsData : newsData.filter(item => item.category === category);
+            displayNews(filtered);
+        }
+
+        // Search news based on location and category
+        function searchNews() {
+            const location = document.getElementById('locationInput').value.trim().toLowerCase();
+            showLoading(true);
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                let filtered = newsData;
+                
+                // Filter by location if provided
+                if (location) {
+                    filtered = filtered.filter(item => 
+                        item.location.toLowerCase().includes(location) ||
+                        item.state.toLowerCase().includes(location)
+                    );
+                    
+                    // Update location display
+                    updateLocationDisplay(location);
+                }
+                
+                // Filter by category
+                if (currentCategory !== 'all') {
+                    filtered = filtered.filter(item => item.category === currentCategory);
+                }
+                
+                showLoading(false);
+                displayNews(filtered);
+            }, 1000);
+        }
+
+        // Use current location
+        function useCurrentLocation() {
+            if (navigator.geolocation) {
+                showLoading(true);
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        // In a real implementation, you would reverse geocode the coordinates
+                        // For demo purposes, we'll simulate finding location
+                        setTimeout(() => {
+                            const simulatedLocation = "Faridabad, Haryana"; // Based on user location mentioned in prompt
+                            document.getElementById('locationInput').value = simulatedLocation;
+                            updateLocationDisplay(simulatedLocation);
+                            
+                            // Filter news for the area (simulate finding regional news)
+                            const filtered = newsData.filter(item => 
+                                item.state.toLowerCase().includes('haryana') || 
+                                item.state.toLowerCase().includes('delhi')
+                            );
+                            
+                            showLoading(false);
+                            displayNews(filtered);
+                        }, 1500);
+                    },
+                    (error) => {
+                        showLoading(false);
+                        alert('Unable to get your location. Please enter manually.');
+                    }
+                );
+            } else {
+                alert('Geolocation is not supported by your browser.');
+            }
+        }
+
+        // Clear location filter
+        function clearLocation() {
+            document.getElementById('locationInput').value = '';
+            document.getElementById('currentLocationDisplay').classList.add('hidden');
+            
+            // Show all news for current category
+            const filtered = currentCategory === 'all' ? newsData : newsData.filter(item => item.category === currentCategory);
+            displayNews(filtered);
+        }
+
+        // Update location display
+        function updateLocationDisplay(location) {
+            const display = document.getElementById('currentLocationDisplay');
+            const text = document.getElementById('currentLocationText');
+            text.textContent = location;
+            display.classList.remove('hidden');
+        }
+
+        // Show/hide loading state
+        function showLoading(show) {
+            const loading = document.getElementById('loadingState');
+            const container = document.getElementById('newsContainer');
+            
+            if (show) {
+                loading.classList.remove('hidden');
+                container.classList.add('hidden');
+            } else {
+                loading.classList.add('hidden');
+                container.classList.remove('hidden');
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeNews);
+
+        // Allow Enter key to search
+        document.getElementById('locationInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchNews();
+            }
+        });
+    </script>
+</body>
+</html>

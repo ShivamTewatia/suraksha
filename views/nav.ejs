@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suraksha Navigation Bar</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #fff8e7 0%, #fff3e0 100%);
+        min-height: 100vh;
+        padding-top: 70px;
+      }
+
+      /* Navigation Bar Styles */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        border-bottom: 3px solid #FF9933;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        height: 70px;
+      }
+
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      /* Logo Section */
+      .logo-section {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .logo-title {
+        font-size: 24px;
+        font-weight: 800;
+        color: #1E3A8A;
+        line-height: 1.2;
+      }
+
+      .logo-subtitle {
+        font-size: 11px;
+        color: #666666;
+        margin-top: -2px;
+      }
+
+      /* Navigation Links */
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+      }
+
+      .nav-link {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #374151;
+        font-weight: 500;
+        font-size: 15px;
+        padding: 8px 16px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .nav-link:hover {
+        color: #FF9933;
+        background-color: rgba(255, 153, 51, 0.1);
+        transform: translateY(-1px);
+      }
+
+      .nav-link.active {
+        color: #FF9933;
+        background-color: rgba(255, 153, 51, 0.15);
+      }
+
+      /* Login Button */
+      .login-btn {
+        background: linear-gradient(135deg, #FF9933 0%, #FFB74D 100%);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-left: 15px;
+      }
+
+      .login-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 153, 51, 0.4);
+      }
+
+      .login-btn.active {
+        background: linear-gradient(135deg, #FF6B35 0%, #FF8F50 100%);
+        box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+      }
+
+      /* Mobile Menu Button */
+      .mobile-menu-btn {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        padding: 5px;
+        gap: 4px;
+      }
+
+      .mobile-menu-btn span {
+        width: 25px;
+        height: 3px;
+        background-color: #1E3A8A;
+        border-radius: 2px;
+        transition: 0.3s;
+      }
+
+      .mobile-menu-btn.active span:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+      }
+
+      .mobile-menu-btn.active span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .mobile-menu-btn.active span:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
+      }
+
+      /* Mobile Menu */
+      .mobile-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border-top: 2px solid #FF9933;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        display: none;
+      }
+
+      .mobile-menu.show {
+        display: block;
+      }
+
+      .mobile-nav-link {
+        display: block;
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 15px 20px;
+        color: #374151;
+        font-weight: 500;
+        font-size: 15px;
+        border-bottom: 1px solid #f0f0f0;
+        transition: all 0.3s ease;
+      }
+
+      .mobile-nav-link:hover,
+      .mobile-nav-link.active {
+        color: #FF9933;
+        background-color: rgba(255, 153, 51, 0.1);
+        border-left: 4px solid #FF9933;
+      }
+
+      .mobile-login {
+        padding: 15px 20px;
+      }
+
+      .mobile-login .login-btn {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+
+        .mobile-menu-btn {
+          display: flex;
+        }
+
+        .logo-title {
+          font-size: 20px;
+        }
+
+        .logo-subtitle {
+          font-size: 10px;
+        }
+      }
+
+      /* Demo content for testing */
+      .demo-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        text-align: center;
+      }
+
+      .demo-content h1 {
+        color: #1E3A8A;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+      }
+
+      .demo-content p {
+        color: #666;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 30px;
+      }
+
+      .demo-links {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .demo-btn {
+        background: linear-gradient(135deg, #FF9933 0%, #FFB74D 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .demo-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 153, 51, 0.4);
+      }
+    </style>
+</head>
+<body>
+    
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Logo Section -->
+            <div class="logo-section">
+                <h1 class="logo-title">Surakshā</h1>
+                <p class="logo-subtitle">Safe Indian Journeys</p>
+            </div>
+
+            <!-- Desktop Navigation Links -->
+            <div class="nav-links">
+                <button onclick="navigateTo('/home')" class="nav-link" data-page="home">Home</button>
+                <button onclick="navigateTo('/about')" class="nav-link" data-page="about">About Us</button>
+                <button onclick="navigateTo('/news')" class="nav-link" data-page="news">News</button>
+                <button onclick="navigateTo('/emergency')" class="nav-link" data-page="emergency">Emergency</button>
+                <button onclick="navigateTo('/login')" class="login-btn" data-page="login">Login</button>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu">
+            <button onclick="navigateTo('/home')" class="mobile-nav-link" data-page="home">Home</button>
+            <button onclick="navigateTo('/about')" class="mobile-nav-link" data-page="about">About Us</button>
+            <button onclick="navigateTo('/news')" class="mobile-nav-link" data-page="news">News</button>
+            <button onclick="navigateTo('/emergency')" class="mobile-nav-link" data-page="emergency">Emergency</button>
+            <div class="mobile-login">
+                <button onclick="navigateTo('/login')" class="login-btn" data-page="login">Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Demo Content -->
+   
+
+    <script>
+        // Get current page from URL
+        function getCurrentPage() {
+            const path = window.location.pathname;
+            const hash = window.location.hash.substring(1); // Remove the # symbol
+            
+            // Check if we're using hash-based routing for demo
+            if (hash) {
+                return hash;
+            }
+            
+            // Regular path-based routing
+            if (path === '/' || path === '/home' || path === '') return 'home';
+            if (path === '/about') return 'about';
+            if (path === '/news') return 'news';
+            if (path === '/emergency') return 'emergency'; // Added emergency page detection
+            if (path === '/login') return 'login';
+            
+            // Extract page from path (handles /page and /page/ formats)
+            const cleanPath = path.replace(/^\/|\/$/g, '');
+            if (['home', 'about', 'news', 'emergency', 'login'].includes(cleanPath)) {
+                return cleanPath;
+            }
+            
+            return 'home'; // default
+        }
+
+        // Set active tab based on current page
+        function setActiveTab() {
+            const currentPage = getCurrentPage();
+            
+            // Update the demo display
+            const currentPageDisplay = document.getElementById('current-page');
+            if (currentPageDisplay) {
+                currentPageDisplay.textContent = currentPage.charAt(0).toUpperCase() + currentPage.slice(1);
+            }
+            
+            // Remove all active classes
+            document.querySelectorAll('.nav-link, .mobile-nav-link, .login-btn').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Add active class to current page links
+            document.querySelectorAll('[data-page]').forEach(link => {
+                if (link.getAttribute('data-page') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Navigate to route
+        function navigateTo(route) {
+            // In a real EJS application, this would navigate to the actual route
+            window.location.href = route;
+        }
+
+        // Demo function to simulate different pages
+        function simulatePage(page) {
+            // Change the hash for demo purposes
+            window.location.hash = page;
+            setActiveTab();
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            mobileMenu.classList.toggle('show');
+            menuBtn.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const navbar = document.querySelector('.navbar');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (!navbar.contains(event.target) && mobileMenu.classList.contains('show')) {
+                mobileMenu.classList.remove('show');
+                menuBtn.classList.remove('active');
+            }
+        });
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', setActiveTab);
+        window.addEventListener('hashchange', setActiveTab);
+
+        // Initialize active tab when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setActiveTab();
+            
+            // Auto-close mobile menu when window is resized to desktop size
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    const menuBtn = document.querySelector('.mobile-menu-btn');
+                    mobileMenu.classList.remove('show');
+                    menuBtn.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

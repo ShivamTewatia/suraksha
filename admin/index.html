@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Tourist Safety Monitoring Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Royal Indian Theme Styles for Admin */
+        body {
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255, 153, 51, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(255, 183, 77, 0.1) 0%, transparent 50%);
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .royal-gradient {
+            background: linear-gradient(135deg, #FF9933 0%, #FFB74D 100%);
+        }
+        
+        .shadow-royal {
+            box-shadow: 0 10px 25px rgba(255, 153, 51, 0.3);
+        }
+        
+        .border-royal {
+            border-color: #B8860B;
+        }
+        
+        .text-royal {
+            color: #FF9933;
+        }
+        
+        .bg-royal {
+            background-color: #FF9933;
+        }
+        
+        .hover-royal:hover {
+            background-color: #e8861f;
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .blink {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.5; }
+        }
+
+        .status-safe {
+            color: #10B981;
+        }
+        
+        .status-alert {
+            color: #EF4444;
+        }
+        
+        .status-warning {
+            color: #F59E0B;
+        }
+
+        /* Map simulation styles */
+        .map-container {
+            background: linear-gradient(45deg, #E5F3FF 25%, #F0F9FF 25%, #F0F9FF 50%, #E5F3FF 50%, #E5F3FF 75%, #F0F9FF 75%);
+            background-size: 40px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tourist-marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 3px solid white;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            z-index: 10;
+        }
+        
+        .tourist-marker:hover {
+            transform: scale(1.3);
+        }
+        
+        .tourist-marker.safe {
+            background-color: #10B981;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+        }
+        
+        .tourist-marker.alert {
+            background-color: #EF4444;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.8);
+            animation: pulse-red 2s infinite;
+        }
+        
+        .tourist-marker.warning {
+            background-color: #F59E0B;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+        }
+        
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.8); }
+            50% { box-shadow: 0 0 25px rgba(239, 68, 68, 1); }
+        }
+
+        .risk-zone {
+            position: absolute;
+            background-color: rgba(239, 68, 68, 0.2);
+            border: 2px solid rgba(239, 68, 68, 0.4);
+            border-radius: 20px;
+        }
+
+        .scrollbar-thin {
+            scrollbar-width: thin;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 350px;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .live-pulse {
+            animation: livePulse 2s infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+    <!-- Login Page -->
+    <div id="login-page" class="min-h-screen flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-royal p-8 max-w-md w-full mx-4">
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4">🛡️</div>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Police Admin Login</h1>
+                <p class="text-gray-600">Smart Tourist Safety Monitoring System</p>
+            </div>
+            
+            <form id="admin-login-form" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                    <input type="text" id="username" placeholder="Admin name" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <input type="password" id="password" placeholder="Password" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900">
+                </div>
+                
+                <button type="submit" class="w-full royal-gradient text-white font-semibold py-4 rounded-xl shadow-royal hover:shadow-lg transition-all duration-300">
+                    Login to Dashboard
+                </button>
+                
+                
+            </form>
+        </div>
+    </div>
+
+    <!-- Police Dashboard (Initially Hidden) -->
+    <div id="dashboard-page" class="hidden min-h-screen">
+        <!-- Header -->
+        <header class="bg-gray-800 shadow-lg border-b border-gray-700">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <div class="flex items-center justify-between">
+                    <h1 class="text-2xl md:text-3xl font-bold text-white">
+                        <span class="text-royal">Smart Tourist Safety</span> Monitoring Dashboard
+                    </h1>
+                    <div class="flex items-center space-x-4">
+                        <div class="text-sm text-gray-300">
+                            <span id="current-time"></span>
+                        </div>
+                        <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Statistics Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition-colors">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm">Total Tourists</p>
+                            <p class="text-3xl font-bold text-white" id="total-tourists">0</p>
+                        </div>
+                        <div class="text-4xl">👥</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition-colors">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm">Safe Status</p>
+                            <p class="text-3xl font-bold status-safe" id="safe-count">0</p>
+                        </div>
+                        <div class="text-4xl">✅</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition-colors">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm">Active Alerts</p>
+                            <p class="text-3xl font-bold status-alert" id="alert-count">0</p>
+                        </div>
+                        <div class="text-4xl blink">🚨</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition-colors">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm">High Risk Zones</p>
+                            <p class="text-3xl font-bold status-warning" id="risk-zones">2</p>
+                        </div>
+                        <div class="text-4xl">⚠️</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Real-time Map Section -->
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-white">Real-time Tourist Map</h2>
+                        <span class="bg-green-600 text-white px-3 py-1 rounded-full text-sm live-pulse">
+                            🟢 LIVE
+                        </span>
+                    </div>
+                    <div class="map-container h-96 rounded-lg relative" id="tourist-map">
+                        <!-- Tourist markers will be inserted here -->
+                        <!-- High-risk zones -->
+                        <div class="risk-zone" style="top: 20%; left: 15%; width: 120px; height: 80px;" title="High Risk Zone 1"></div>
+                        <div class="risk-zone" style="top: 60%; left: 70%; width: 100px; height: 100px;" title="High Risk Zone 2"></div>
+                    </div>
+                    <div class="mt-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-6 text-sm">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-4 h-4 bg-green-500 rounded-full"></div>
+                                <span class="text-gray-300">Safe</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-4 h-4 bg-yellow-500 rounded-full"></div>
+                                <span class="text-gray-300">Warning</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-4 h-4 bg-red-500 rounded-full"></div>
+                                <span class="text-gray-300">Alert</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-4 h-4 bg-red-500 bg-opacity-30 border-2 border-red-500 border-opacity-60 rounded"></div>
+                                <span class="text-gray-300">Risk Zone</span>
+                            </div>
+                        </div>
+                        <button onclick="refreshMap()" class="text-royal hover:text-orange-400 text-sm font-medium transition-colors">
+                            🔄 Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Active Alerts Feed -->
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-white">Active Alerts</h2>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm" id="live-indicator">
+                                🔴 LIVE
+                            </span>
+                            <button onclick="clearAllAlerts()" class="text-gray-400 hover:text-white text-sm font-medium transition-colors">
+                                Clear All
+                            </button>
+                        </div>
+                    </div>
+                    <div class="h-80 overflow-y-auto scrollbar-thin" id="alerts-feed">
+                        <!-- Alert items will be inserted here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Tourist Section -->
+            <div class="mt-8 bg-gray-800 rounded-xl p-6 border border-gray-700">
+                <h2 class="text-xl font-bold text-white mb-4">Search Tourist</h2>
+                <div class="flex flex-col md:flex-row gap-4">
+                    <div class="flex-1">
+                        <input type="text" id="search-input" placeholder="Enter Tourist ID (e.g., SIH25002A, SIH25002B, SIH25002C)" 
+                               class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                    </div>
+                    <button onclick="searchTourist()" class="royal-gradient text-white font-semibold py-3 px-6 rounded-xl hover:shadow-lg transition-all duration-300">
+                        🔍 Search
+                    </button>
+                    <button onclick="clearSearch()" class="bg-gray-600 hover:bg-gray-500 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300">
+                        Clear
+                    </button>
+                </div>
+                
+                <!-- Tourist Profile Card (Initially Hidden) -->
+                <div id="tourist-profile" class="hidden mt-6 bg-gray-700 rounded-xl p-6 border border-gray-600">
+                    <h3 class="text-lg font-bold text-white mb-4">Tourist Profile</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="flex items-start space-x-4">
+                                <div class="w-16 h-16 bg-gradient-to-br from-orange-200 to-yellow-200 rounded-full flex items-center justify-center text-2xl">
+                                    👤
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold text-white" id="profile-name"></h4>
+                                    <p class="text-gray-300" id="profile-id"></p>
+                                    <p class="text-gray-400 text-sm" id="profile-itinerary"></p>
+                                    <div class="mt-2">
+                                        <span class="inline-block px-3 py-1 rounded-full text-sm font-medium" id="profile-status"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div>
+                                <p class="text-gray-400 text-sm">Safety Score</p>
+                                <div class="flex items-center space-x-2">
+                                    <p class="text-2xl font-bold text-white" id="profile-score"></p>
+                                    <div class="flex-1 bg-gray-600 rounded-full h-2">
+                                        <div class="h-2 rounded-full transition-all duration-500" id="profile-score-bar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-sm">Last Known Location</p>
+                                <p class="text-white" id="profile-location"></p>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-sm">Emergency Contact</p>
+                                <p class="text-white" id="profile-emergency"></p>
+                            </div>
+                            <div class="flex space-x-2 pt-2">
+                                <button onclick="contactTourist()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                                    📞 Contact
+                                </button>
+                                <button onclick="trackTourist()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                                    📍 Track
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

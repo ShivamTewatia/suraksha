@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suraksha - Emergency Services</title>
+    <meta name="description" content="24/7 Emergency Services - Police, Fire, Ambulance, and Local Authorities">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Custom Tailwind Config Colors */
+      :root {
+        --saffron: #FF9933;
+        --marigold: #FFB74D;
+        --deepgold: #B8860B;
+        --royalblue: #1E3A8A;
+        --emergency-red: #dc2626;
+      }
+
+      /* Custom Styles for Royal Indian Theme */
+      body {
+        background: linear-gradient(135deg, #fff8e7 0%, #fff3e0 100%);
+        background-attachment: fixed;
+      }
+
+      .royal-texture {
+        background-image: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23FFB74D" fill-opacity="0.1"><circle cx="30" cy="30" r="2"/></g></svg>');
+      }
+
+      .gradient-saffron {
+        background: linear-gradient(135deg, #ff9933 0%, #ffb74d 100%);
+      }
+
+      .shadow-royal {
+        box-shadow: 0 10px 25px rgba(255, 153, 51, 0.2);
+      }
+
+      .btn-royal {
+        background: linear-gradient(135deg, #ff9933 0%, #ffb74d 100%);
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+      }
+
+      .btn-royal:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255, 153, 51, 0.3);
+      }
+
+      .btn-emergency {
+        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+      }
+
+      .btn-emergency:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
+      }
+
+      .card-royal {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 153, 51, 0.2);
+        box-shadow: 0 10px 25px rgba(255, 153, 51, 0.2);
+      }
+
+      .bg-gradient-saffron-light {
+        background: linear-gradient(135deg, #fff8e7 0%, #ffe0b2 100%);
+      }
+
+      .emergency-icon {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+      }
+
+      .location-card {
+        transition: all 0.3s ease;
+      }
+
+      .location-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(184, 134, 11, 0.35);
+      }
+
+      .dropdown-animate {
+        transition: all 0.3s ease-in-out;
+      }
+
+      .map-container {
+        height: 400px;
+        background: linear-gradient(45deg, #e8f4fd 0%, #b8860b 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+      }
+
+      .emergency-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .service-selector {
+        border: 2px solid var(--saffron);
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 16px;
+        background: white;
+        width: 100%;
+      }
+
+      .service-selector:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(255, 153, 51, 0.2);
+      }
+
+      .btn-outline-saffron {
+        border: 2px solid var(--saffron);
+        color: var(--saffron);
+        background: transparent;
+        padding: 8px 16px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+      }
+
+      .btn-outline-saffron:hover {
+        background: var(--saffron);
+        color: white;
+      }
+
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: white;
+        border-radius: 8px;
+        padding: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        transform: translateX(100%);
+        transition: all 0.3s ease;
+        z-index: 1000;
+        max-width: 300px;
+      }
+
+      .notification.show {
+        transform: translateX(0);
+      }
+
+      .notification.success {
+        border-left: 4px solid #10b981;
+      }
+
+      .notification.error {
+        border-left: 4px solid #ef4444;
+      }
+
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .modal-overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        max-width: 90vw;
+        max-height: 80vh;
+        overflow-y: auto;
+        transform: scale(0.9);
+        transition: all 0.3s ease;
+      }
+
+      .modal-overlay.show .modal {
+        transform: scale(1);
+      }
+
+      .phrase-card {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 153, 51, 0.3);
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.2s ease;
+      }
+
+      .phrase-card:hover {
+        background: rgba(255, 153, 51, 0.1);
+        border-color: var(--saffron);
+      }
+
+      .speaker-btn {
+        background: var(--saffron);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .speaker-btn:hover {
+        background: var(--deepgold);
+        transform: scale(1.1);
+      }
+
+      .location-toggle {
+        display: flex;
+        background: #f3f4f6;
+        border-radius: 8px;
+        padding: 4px;
+        margin-bottom: 16px;
+      }
+
+      .location-toggle button {
+        flex: 1;
+        padding: 8px 16px;
+        border: none;
+        background: transparent;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        font-weight: 500;
+      }
+
+      .location-toggle button.active {
+        background: var(--saffron);
+        color: white;
+      }
+
+      @media (max-width: 768px) {
+        .emergency-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .grid-mobile {
+          grid-template-columns: 1fr;
+        }
+
+        .modal {
+          margin: 20px;
+          max-width: calc(100vw - 40px);
+        }
+      }
+
+      /* Loading spinner */
+      .spinner {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid var(--saffron);
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+</head>
+<body class="royal-texture">
+    <%-include("nav.ejs") %>
+    <div id="notificationContainer"></div>
+
+    <!-- Emergency Phrases Modal -->
+    <div id="phrasesModal" class="modal-overlay">
+        <div class="modal">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold" style="color: var(--royalblue);">Emergency Phrases</h2>
+                <button onclick="closePhrasesModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+            <div id="phrasesContent">
+                <!-- Phrases will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Location Selection Modal -->
+    <div id="locationModal" class="modal-overlay">
+        <div class="modal">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold" style="color: var(--royalblue);">Select Location</h2>
+                <button onclick="closeLocationModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Choose Location Type:</label>
+                    <div class="location-toggle">
+                        <button id="currentLocationBtn" onclick="selectLocationType('current')" class="active">Use Current Location</button>
+                        <button id="specificLocationBtn" onclick="selectLocationType('specific')">Specific Location</button>
+                    </div>
+                </div>
+                <div id="specificLocationDiv" style="display: none;">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Enter Location:</label>
+                    <input type="text" id="specificLocationInput" placeholder="Enter city, area, or address" class="service-selector">
+                </div>
+                <div class="flex gap-4">
+                    <button onclick="confirmLocationSelection()" class="btn-royal text-white px-6 py-2 rounded-lg flex-1">Confirm</button>
+                    <button onclick="closeLocationModal()" class="btn-outline-saffron px-6 py-2 rounded-lg flex-1">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between flex-wrap">
+            <h1 class="text-2xl font-bold flex items-center" style="color: var(--royalblue);">
+                <svg class="w-8 h-8 mr-2" style="color: var(--saffron);" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                Suraksha - Emergency Services
+            </h1>
+            <button  class="btn-emergency text-white px-6 py-2 rounded-lg font-semibold emergency-icon">
+                <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                </svg>
+                PANIC BUTTON
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        
+        <!-- Emergency Alert Banner -->
+        <div class="bg-red-100 border-l-4 border-red-500 p-4 mb-8 rounded-r-lg">
+            <div class="flex items-center">
+                <div class="emergency-icon text-red-500 text-2xl mr-3">⚠️</div>
+                <div>
+                    <p class="text-red-700 font-semibold">Emergency Services Available 24/7</p>
+                    <p class="text-red-600 text-sm">Your location is being monitored for your safety</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Emergency Actions -->
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+            <button onclick="makeCall('100')" class="btn-emergency text-white p-6 rounded-xl text-center hover:transform hover:scale-105 transition-all duration-300">
+                <div class="text-3xl mb-2">🚔</div>
+                <h3 class="font-bold text-lg">Police</h3>
+                <p class="text-sm opacity-90">Call: 100</p>
+            </button>
+            <button onclick="makeCall('108')" class="btn-emergency text-white p-6 rounded-xl text-center hover:transform hover:scale-105 transition-all duration-300">
+                <div class="text-3xl mb-2">🚑</div>
+                <h3 class="font-bold text-lg">Ambulance</h3>
+                <p class="text-sm opacity-90">Call: 108</p>
+            </button>
+            <button onclick="makeCall('101')" class="btn-emergency text-white p-6 rounded-xl text-center hover:transform hover:scale-105 transition-all duration-300">
+                <div class="text-3xl mb-2">🔥</div>
+                <h3 class="font-bold text-lg">Fire Brigade</h3>
+                <p class="text-sm opacity-90">Call: 101</p>
+            </button>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="emergency-grid">
+            <!-- Nearby Services Section -->
+            <div class="card-royal rounded-xl p-6 shadow-royal">
+                <h2 class="text-2xl font-bold mb-6 flex items-center" style="color: var(--royalblue);">
+                    <svg class="w-6 h-6 mr-2" style="color: var(--saffron);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Find Nearby Services
+                </h2>
+                
+                <!-- Location Selection -->
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block text-sm font-medium text-gray-700">Search Location:</label>
+                        <button onclick="openLocationModal()" class="btn-outline-saffron text-xs px-3 py-1">Change Location</button>
+                    </div>
+                    <div id="selectedLocationDisplay" class="service-selector bg-gray-50 text-gray-700 cursor-pointer" onclick="openLocationModal()">
+                        📍 Current Location (Click to change)
+                    </div>
+                </div>
+                
+                <!-- Service Selector Dropdown -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Select Service Type:</label>
+                    <select id="serviceType" class="service-selector">
+                        <option value="">Choose a service...</option>
+                        <option value="hospital">🏥 Hospitals</option>
+                        <option value="petrol">⛽ Petrol Pumps</option>
+                        <option value="cng">🚗 CNG Stations</option>
+                        <option value="electric">🔌 Electric Chargers</option>
+                        <option value="police">🚔 Police Stations</option>
+                        <option value="bus_intercity">🚌 Inter City Bus Stations</option>
+                        <option value="bus_intracity">🚐 Intra City Bus Stations</option>
+                        <option value="railway">🚂 Railway Stations</option>
+                        <option value="metro">🚇 Metro Stations</option>
+                        <option value="thana">🏛️ Thana/Police Posts</option>
+                        <option value="choki">🛡️ Police Choki</option>
+                    </select>
+                </div>
+
+                <!-- Distance Filter -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Search Radius:</label>
+                    <select id="distanceFilter" class="service-selector">
+                        <option value="1">Within 1 km</option>
+                        <option value="5" selected>Within 5 km</option>
+                        <option value="10">Within 10 km</option>
+                        <option value="25">Within 25 km</option>
+                    </select>
+                </div>
+
+                <!-- Search Button -->
+                <button onclick="searchNearbyServices()" class="btn-royal text-white w-full py-3 rounded-lg font-semibold mb-6 flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    Search Nearby Services
+                </button>
+
+                <!-- Map Placeholder -->
+                <div class="map-container mb-6">
+                    <div class="text-center" style="color: var(--royalblue);">
+                        <div class="text-4xl mb-2">🗺️</div>
+                        <p class="font-semibold">Interactive Map</p>
+                        <p class="text-sm opacity-75">Nearby services will appear here</p>
+                    </div>
+                </div>
+
+                <!-- Results Container -->
+                <div id="searchResults" class="space-y-3">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+
+            <!-- Emergency Contacts Section -->
+            <div class="card-royal rounded-xl p-6 shadow-royal">
+                <h2 class="text-2xl font-bold mb-6 flex items-center" style="color: var(--royalblue);">
+                    <svg class="w-6 h-6 mr-2" style="color: var(--saffron);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                    </svg>
+                    Emergency Helpline Numbers
+                </h2>
+
+                <!-- Location Selector -->
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block text-sm font-medium text-gray-700">Contact Location:</label>
+                        <button onclick="openLocationModal('contacts')" class="btn-outline-saffron text-xs px-3 py-1">Change Location</button>
+                    </div>
+                    <select id="locationSelector" onchange="updateEmergencyNumbers()" class="service-selector">
+                        <option value="delhi">Delhi</option>
+                        <option value="mumbai">Mumbai</option>
+                        <option value="bangalore">Bangalore</option>
+                        <option value="kolkata">Kolkata</option>
+                        <option value="hyderabad">Hyderabad</option>
+                        <option value="pune">Pune</option>
+                        <option value="ahmedabad">Ahmedabad</option>
+                        <option value="faridabad" selected>Faridabad</option>
+                    </select>
+                </div>
+
+                <!-- National Emergency Numbers -->
+                <div class="mb-6">
+                    <h3 class="font-bold text-lg mb-3" style="color: var(--royalblue);">National Emergency Numbers</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                            <div class="flex items-center">
+                                <span class="text-red-600 mr-2">🚔</span>
+                                <span class="font-medium">Police</span>
+                            </div>
+                            <button onclick="makeCall('100')" class="btn-emergency text-white px-4 py-1 rounded text-sm">100</button>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                            <div class="flex items-center">
+                                <span class="text-red-600 mr-2">🔥</span>
+                                <span class="font-medium">Fire</span>
+                            </div>
+                            <button onclick="makeCall('101')" class="btn-emergency text-white px-4 py-1 rounded text-sm">101</button>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                            <div class="flex items-center">
+                                <span class="text-red-600 mr-2">🚑</span>
+                                <span class="font-medium">Ambulance</span>
+                            </div>
+                            <button onclick="makeCall('108')" class="btn-emergency text-white px-4 py-1 rounded text-sm">108</button>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                            <div class="flex items-center">
+                                <span class="text-blue-600 mr-2">👮‍♀️</span>
+                                <span class="font-medium">Women Helpline</span>
+                            </div>
+                            <button onclick="makeCall('1091')" class="btn-royal text-white px-4 py-1 rounded text-sm">1091</button>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                            <div class="flex items-center">
+                                <span class="text-green-600 mr-2">🏥</span>
+                                <span class="font-medium">Medical Emergency</span>
+                            </div>
+                            <button onclick="makeCall('102')" class="btn-royal text-white px-4 py-1 rounded text-sm">102</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Local Authorities -->
+                <div class="mb-6">
+                    <h3 class="font-bold text-lg mb-3" style="color: var(--royalblue);">Local Authorities</h3>
+                    <div id="localContacts" class="space-y-2">
+                        <!-- Local contacts will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Quick Language Assistance -->
+                <div class="mb-6">
+                    <h3 class="font-bold text-lg mb-3 flex items-center" style="color: var(--royalblue);">
+                        Quick Language Assistance
+                        <button onclick="openPhrasesModal()" class="ml-auto btn-royal text-white px-3 py-1 rounded text-sm flex items-center">
+                            
+                            SPEAK
+                        </button>
+                    </h3>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="changeLanguage('Hindi')" class="btn-royal text-white p-2 rounded text-sm font-medium">
+                            🇮🇳 Hindi
+                        </button>
+                        <button onclick="changeLanguage('English')" class="btn-royal text-white p-2 rounded text-sm font-medium">
+                            🇬🇧 English
+                        </button>
+                        <button onclick="changeLanguage('Bengali')" class="btn-royal text-white p-2 rounded text-sm font-medium">
+                            🌍 Bengali
+                        </button>
+                        <button onclick="changeLanguage('Tamil')" class="btn-royal text-white p-2 rounded text-sm font-medium">
+                            🌍 Tamil
+                        </button>
+                        <button onclick="changeLanguage('Telugu')" class="btn-royal text-white p-2 rounded text-sm font-medium">
+                            🌍 Telugu
+                        </button>
+                        <button onclick="changeLanguage('Marathi')" class="btn-royal text-white p-2 rounded text-sm font-medium">
+                            🌍 Marathi
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Additional Emergency Features -->
+                <div class="border-t pt-6">
+                    <h3 class="font-bold text-lg mb-3" style="color: var(--royalblue);">Emergency Features</h3>
+                    <div class="space-y-3">
+                        <button onclick="sendLocation()" class="w-full p-3 bg-blue-50 text-blue-800 rounded-lg font-medium hover:bg-blue-100 transition-colors flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            </svg>
+                            Send Location to Emergency Contact
+                        </button>
+                        <button onclick="voiceAlert()" class="w-full p-3 bg-green-50 text-green-800 rounded-lg font-medium hover:bg-green-100 transition-colors flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                            Voice Emergency Alert
+                        </button>
+                        <button onclick="medicalInfo()" class="w-full p-3 bg-purple-50 text-purple-800 rounded-lg font-medium hover:bg-purple-100 transition-colors flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Medical Information
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let selectedLanguage = 'English';
+        let selectedLocationType = 'current';
+        let selectedLocation = 'Current Location';
+        let currentModal = '';
+
+        // Emergency phrases in different languages
+        const emergencyPhrases = {
+            English: [
+                "Help me! I'm in danger!",
+                "Call the police immediately!",
+                "I need medical assistance!",
+                "There's a fire here!",
+                "I'm lost and need directions!",
+                "Someone is following me!",
+                "I've been in an accident!",
+                "I need an ambulance now!",
+                "This is an emergency!",
+                "Please help me!"
+            ],
+            Hindi: [
+                "Help me! I'm in danger!",
+                "Call the police immediately!",
+                "I need medical assistance!",
+                "There's a fire here!",
+                "I'm lost and need directions!",
+                "Someone is following me!",
+                "I've been in an accident!",
+                "I need an ambulance now!",
+                "This is an emergency!",
+                "Please help me!"
+            ],
+            Bengali: [
+                "Help me! I'm in danger!",
+                "Call the police immediately!",
+                "I need medical assistance!",
+                "There's a fire here!",
+                "I'm lost and need directions!",
+                "Someone is following me!",
+                "I've been in an accident!",
+                "I need an ambulance now!",
+                "This is an emergency!",
+                "Please help me!"
+            ],
+            Tamil: [
+                "Help me! I'm in danger!",
+                "Call the police immediately!",
+                "I need medical assistance!",
+                "There's a fire here!",
+                "I'm lost and need directions!",
+                "Someone is following me!",
+                "I've been in an accident!",
+                "I need an ambulance now!",
+                "This is an emergency!",
+                "Please help me!"
+            ],
+            Telugu: [
+                "Help me! I'm in danger!",
+                "Call the police immediately!",
+                "I need medical assistance!",
+                "There's a fire here!",
+                "I'm lost and need directions!",
+                "Someone is following me!",
+                "I've been in an accident!",
+                "I need an ambulance now!",
+                "This is an emergency!",
+                "Please help me!"
+            ],
+            Marathi: [
+                "Help me! I'm in danger!",
+                "Call the police immediately!",
+                "I need medical assistance!",
+                "There's a fire here!",
+                "I'm lost and need directions!",
+                "Someone is following me!",
+                "I've been in an accident!",
+                "I need an ambulance now!",
+                "This is an emergency!",
+                "Please help me!"
+            ]
+        };
+
+        // Mock data for local contacts
+        const localContacts = {
+            faridabad: [
+                { name: "Faridabad Police Station", number: "0129-2288100", type: "police" },
+                { name: "District Hospital Faridabad", number: "0129-2288200", type: "hospital" },
+                { name: "Fire Station Faridabad", number: "0129-2288300", type: "fire" }
+            ],
+            delhi: [
+                { name: "Delhi Police Control Room", number: "011-23490000", type: "police" },
+                { name: "AIIMS Emergency", number: "011-26588500", type: "hospital" },
+                { name: "Delhi Fire Service", number: "011-23971135", type: "fire" }
+            ],
+            mumbai: [
+                { name: "Mumbai Police Control", number: "022-22621111", type: "police" },
+                { name: "KEM Hospital", number: "022-24136051", type: "hospital" },
+                { name: "Mumbai Fire Brigade", number: "022-23073333", type: "fire" }
+            ],
+            bangalore: [
+                { name: "Bangalore Police", number: "080-22294444", type: "police" },
+                { name: "Victoria Hospital", number: "080-26700447", type: "hospital" },
+                { name: "Fire & Emergency Services", number: "080-22221300", type: "fire" }
+            ]
+        };
+
+        // Mock data for nearby services
+        const mockServices = {
+            hospital: [
+                { name: "City Hospital", address: "Main Road, City Center", distance: "0.8 km", phone: "123-456-7890" },
+                { name: "General Hospital", address: "Park Street", distance: "1.2 km", phone: "123-456-7891" },
+                { name: "Emergency Care Center", address: "Highway Road", distance: "2.1 km", phone: "123-456-7892" }
+            ],
+            police: [
+                { name: "Central Police Station", address: "Government Complex", distance: "0.5 km", phone: "100" },
+                { name: "Traffic Police Post", address: "Main Intersection", distance: "0.9 km", phone: "103" },
+                { name: "Women Police Station", address: "Civil Lines", distance: "1.5 km", phone: "1091" }
+            ],
+            petrol: [
+                { name: "HP Petrol Pump", address: "Highway Junction", distance: "0.3 km", phone: "123-456-7893" },
+                { name: "Indian Oil Station", address: "Market Road", distance: "0.7 km", phone: "123-456-7894" },
+                { name: "Bharat Petroleum", address: "Ring Road", distance: "1.1 km", phone: "123-456-7895" }
+            ]
+        };
+
+        // Initialize the app
+        window.onload = function() {
+            updateEmergencyNumbers();
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        showNotification('Location access granted', 'success');
+                    },
+                    function(error) {
+                        showNotification('Location access denied. Some features may be limited.', 'error');
+                    }
+                );
+            }
+        };
+
+        // Notification system
+        function showNotification(message, type = 'success') {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-gray-500">&times;</button>
+                </div>
+            `;
+            container.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 5000);
+        }
+
+        // Location Modal Functions
+        function openLocationModal(context = 'search') {
+            currentModal = context;
+            document.getElementById('locationModal').classList.add('show');
+        }
+
+        function closeLocationModal() {
+            document.getElementById('locationModal').classList.remove('show');
+            currentModal = '';
+        }
+
+        function selectLocationType(type) {
+            selectedLocationType = type;
+            const currentBtn = document.getElementById('currentLocationBtn');
+            const specificBtn = document.getElementById('specificLocationBtn');
+            const specificDiv = document.getElementById('specificLocationDiv');
+            
+            if (type === 'current') {
+                currentBtn.classList.add('active');
+                specificBtn.classList.remove('active');
+                specificDiv.style.display = 'none';
+            } else {
+                specificBtn.classList.add('active');
+                currentBtn.classList.remove('active');
+                specificDiv.style.display = 'block';
+            }
+        }
+
+        function confirmLocationSelection() {
+            if (selectedLocationType === 'current') {
+                selectedLocation = 'Current Location';
+                showNotification('Using current location', 'success');
+            } else {
+                const specificLocation = document.getElementById('specificLocationInput').value.trim();
+                if (specificLocation) {
+                    selectedLocation = specificLocation;
+                    showNotification(`Location set to: ${specificLocation}`, 'success');
+                } else {
+                    showNotification('Please enter a location', 'error');
+                    return;
+                }
+            }
+            
+            // Update display
+            document.getElementById('selectedLocationDisplay').innerHTML = `📍 ${selectedLocation} (Click to change)`;
+            
+            // If this was for contacts, update the location selector
+            if (currentModal === 'contacts') {
+                // Could update contact location logic here
+            }
+            
+            closeLocationModal();
+        }
+
+        // Emergency Phrases Modal Functions
+        function openPhrasesModal() {
+            loadEmergencyPhrases();
+            document.getElementById('phrasesModal').classList.add('show');
+        }
+
+        function closePhrasesModal() {
+            document.getElementById('phrasesModal').classList.remove('show');
+        }
+
+        function loadEmergencyPhrases() {
+            const phrasesContent = document.getElementById('phrasesContent');
+            const phrases = emergencyPhrases[selectedLanguage] || emergencyPhrases.English;
+            
+            phrasesContent.innerHTML = `
+                <div class="mb-4">
+                    <h3 class="font-bold text-lg mb-2" style="color: var(--royalblue);">Emergency Phrases in ${selectedLanguage}</h3>
+                    <p class="text-sm text-gray-600 mb-4">Click the speaker icon to hear the phrase spoken aloud</p>
+                </div>
+                <div class="space-y-2 max-h-96 overflow-y-auto">
+                    ${phrases.map(phrase => `
+                        <div class="phrase-card">
+                            <span class="flex-1 text-left">${phrase}</span>
+                            <button onclick="speakPhrase('${phrase.replace(/'/g, "\\'")}', '${selectedLanguage}')" class="speaker-btn">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 14.142M9 9H7a2 2 0 00-2 2v2a2 2 0 002 2h2l5 5V4L9 9z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Text-to-speech function
+        function speakPhrase(phrase, language) {
+            if ('speechSynthesis' in window) {
+                // Cancel any ongoing speech
+                speechSynthesis.cancel();
+                
+                const utterance = new SpeechSynthesisUtterance(phrase);
+                
+                // Set language based on selection
+                const languageCodes = {
+                    'English': 'en-IN',
+                    'Hindi': 'hi-IN',
+                    'Bengali': 'bn-IN',
+                    'Tamil': 'ta-IN',
+                    'Telugu': 'te-IN',
+                    'Marathi': 'mr-IN'
+                };
+                
+                utterance.lang = languageCodes[language] || 'en-IN';
+                utterance.rate = 0.8;
+                utterance.pitch = 1;
+                
+                utterance.onstart = function() {
+                    showNotification(`Speaking: ${phrase.substring(0, 30)}...`, 'success');
+                };
+                
+                utterance.onerror = function(event) {
+                    showNotification('Speech not supported on this device', 'error');
+                };
+                
+                speechSynthesis.speak(utterance);
+            } else {
+                showNotification('Speech synthesis not supported', 'error');
+            }
+        }
+
+        // Language change function
+        function changeLanguage(language) {
+            selectedLanguage = language;
+            showNotification(`Language changed to ${language}`, 'success');
+            
+            // Update all language buttons to show selection
+            const buttons = document.querySelectorAll('[onclick^="changeLanguage"]');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-opacity-50');
+                if (btn.textContent.includes(language)) {
+                    btn.classList.add('bg-opacity-50');
+                }
+            });
+        }
+
+        // Search nearby services function
+        function searchNearbyServices() {
+            const serviceType = document.getElementById('serviceType').value;
+            const distance = document.getElementById('distanceFilter').value;
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (!serviceType) {
+                showNotification('Please select a service type', 'error');
+                return;
+            }
+            
+            // Show loading
+            resultsContainer.innerHTML = '<div class="text-center py-4"><div class="spinner"></div><p class="mt-2">Searching for nearby services...</p></div>';
+            
+            // Simulate API call
+            setTimeout(() => {
+                const services = mockServices[serviceType] || [];
+                const filteredServices = services.filter(service => {
+                    const serviceDistance = parseFloat(service.distance);
+                    return serviceDistance <= parseInt(distance);
+                });
+                
+                if (filteredServices.length === 0) {
+                    resultsContainer.innerHTML = `
+                        <div class="text-center py-8 text-gray-500">
+                            <div class="text-4xl mb-2">🔍</div>
+                            <p>No ${serviceType} services found within ${distance}km of ${selectedLocation}</p>
+                        </div>
+                    `;
+                } else {
+                    resultsContainer.innerHTML = `
+                        <h3 class="font-bold mb-3" style="color: var(--royalblue);">Found ${filteredServices.length} services near ${selectedLocation}</h3>
+                        ${filteredServices.map(service => `
+                            <div class="location-card p-4 bg-white rounded-lg border border-gray-200">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h4 class="font-semibold text-lg">${service.name}</h4>
+                                    <span class="text-sm bg-green-100 text-green-800 px-2 py-1 rounded">${service.distance}</span>
+                                </div>
+                                <p class="text-gray-600 mb-3">${service.address}</p>
+                                <div class="flex gap-2">
+                                    <button onclick="makeCall('${service.phone}')" class="btn-emergency text-white px-4 py-2 rounded text-sm flex items-center">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                        </svg>
+                                        Call
+                                    </button>
+                                    <button onclick="getDirections('${service.name}')" class="btn-royal text-white px-4 py-2 rounded text-sm flex items-center">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m0 0L9 7"></path>
+                                        </svg>
+                                        Directions
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    `;
+                }
+                
+                showNotification(`Search completed for ${selectedLocation}`, 'success');
+            }, 2000);
+        }
+
+        // Update emergency numbers based on location
+        function updateEmergencyNumbers() {
+            const location = document.getElementById('locationSelector').value;
+            const localContactsContainer = document.getElementById('localContacts');
+            
+            const contacts = localContacts[location] || localContacts.faridabad;
+            
+            localContactsContainer.innerHTML = contacts.map(contact => {
+                const iconMap = {
+                    police: '🚔',
+                    hospital: '🏥',
+                    fire: '🔥'
+                };
+                
+                return `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center">
+                            <span class="text-blue-600 mr-2">${iconMap[contact.type] || '📞'}</span>
+                            <div>
+                                <div class="font-medium">${contact.name}</div>
+                                <div class="text-sm text-gray-600">${contact.number}</div>
+                            </div>
+                        </div>
+                        <button onclick="makeCall('${contact.number}')" class="btn-royal text-white px-3 py-1 rounded text-sm">Call</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Utility functions
+        function makeCall(number) {
+            if (confirm(`Do you want to call ${number}?`)) {
+                window.location.href = `tel:${number}`;
+                showNotification(`Calling ${number}...`, 'success');
+            }
+        }
+
+        function panicButton() {
+            if (confirm('PANIC BUTTON ACTIVATED! This will alert emergency services. Continue?')) {
+                showNotification('Emergency services have been alerted!', 'success');
+                // Simulate emergency actions
+                setTimeout(() => {
+                    makeCall('100');
+                }, 1000);
+            }
+        }
+
+        function sendLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        showNotification(`Location sent: ${lat.toFixed(4)}, ${lng.toFixed(4)}`, 'success');
+                    },
+                    function(error) {
+                        showNotification('Unable to get location. Please enable location services.', 'error');
+                    }
+                );
+            } else {
+                showNotification('Geolocation not supported', 'error');
+            }
+        }
+
+        function voiceAlert() {
+            const phrase = `This is an emergency alert. I need immediate assistance. My current language is set to ${selectedLanguage}.`;
+            speakPhrase(phrase, selectedLanguage);
+        }
+
+        function medicalInfo() {
+            showNotification('Medical information feature - would connect to medical ID/info', 'success');
+        }
+
+        function getDirections(placeName) {
+            showNotification(`Getting directions to ${placeName}...`, 'success');
+            // This would integrate with maps application
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const phrasesModal = document.getElementById('phrasesModal');
+            const locationModal = document.getElementById('locationModal');
+            
+            if (event.target === phrasesModal) {
+                closePhrasesModal();
+            }
+            if (event.target === locationModal) {
+                closeLocationModal();
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            // ESC to close modals
+            if (event.key === 'Escape') {
+                closePhrasesModal();
+                closeLocationModal();
+            }
+            
+            // Emergency shortcut (Ctrl+E)
+            if (event.ctrlKey && event.key === 'e') {
+                event.preventDefault();
+                panicButton();
+            }
+        });
+    </script>
+</body>
+</html>
